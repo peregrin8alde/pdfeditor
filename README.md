@@ -3,7 +3,7 @@
 
 ## 目的
 - Github flowに慣れる。
-- Java9、EEの勉強
+- Java9、EEの勉強。
 
 ## 目標
 - Web上、コマンドそれぞれでgit／github関連の作業をできるだけ試す。
