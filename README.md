@@ -2,7 +2,7 @@
 【GitHub練習用リポジトリ】
 PDFエディタ
 
-README記載項目は以下を参考にする。
+README記載項目は以下を参考にする。  
 https://guides.github.com/features/wikis/
 
 ## Description
@@ -26,7 +26,7 @@ https://guides.github.com/features/wikis/
 `git clone`と`maven`を用いた方法を予定。
 
 ## Usage
-概要を記載予定。
+概要を記載予定。  
 詳細は`/docs`配下にGitHub Pagesとして用意。
 
 ## Contributing
