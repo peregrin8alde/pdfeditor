@@ -23,7 +23,7 @@ https://guides.github.com/features/wikis/
 - GUI上でのプレビュー表示
 
 ## Installation
-`git clone`と`maven`を用いた方法を予定。
+`git clone`と`gradle`を用いた方法を予定。
 
 ## Usage
 概要を記載予定。  
