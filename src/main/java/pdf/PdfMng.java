@@ -6,38 +6,61 @@ import org.apache.pdfbox.pdmodel.PDPage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PdfMng {
 
-    public PDDocument open(String fileName) {
-        PDDocument newDoc = null;
+    private HashMap<String, PDDocument> docMap;
 
-        try (PDDocument pdfdoc = PDDocument.load(new File(fileName))) {
-
-            newDoc = pdfdoc;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return newDoc;
+    public PdfMng() {
+        docMap = new HashMap<String, PDDocument>();
     }
 
-    public PDDocument merge(PDDocument pdfBase, PDDocument pdfAdd) {
-        PDDocument pdfNew = null;
-        try (PDDocument pdfdoc = new PDDocument()) {
-            pdfBase.getPages().forEach(page -> pdfdoc.addPage(page));
-            pdfAdd.getPages().forEach(page -> pdfdoc.addPage(page));
-            
-            pdfNew = pdfdoc;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public PDDocument open(String fileName) throws IOException {
+        PDDocument pdfdoc = PDDocument.load(new File(fileName));
+        docMap.put(fileName, pdfdoc);
 
-        return pdfNew;
+        return pdfdoc;
     }
 
-    public void save(PDDocument pdf, String fileName) throws IOException {
+    public void close(String fileName) throws IOException {
+        PDDocument pdfdoc = docMap.get(fileName);
+        pdfdoc.close();
+        docMap.remove(fileName);
+    }
 
-        pdf.save(fileName);
+    public void finish() {
+        for(Map.Entry<String, PDDocument> entry : docMap.entrySet()) {
+            String key = entry.getKey();
+            PDDocument pdfdoc = entry.getValue();
+            try {
+                pdfdoc.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        docMap.clear();
+    }
+
+    public PDDocument merge(String[] inputFileNames, String outputFileName) throws IOException {
+        PDDocument resultDoc = new PDDocument();
+
+        for (String fileName : inputFileNames) {
+            PDDocument pdfdoc = docMap.get(fileName);
+            if (pdfdoc == null) {
+                pdfdoc = open(fileName);
+            }
+
+            pdfdoc.getPages().forEach(page -> resultDoc.addPage(page));
+        }
+        docMap.put(outputFileName, resultDoc);
+
+        return resultDoc;
+    }
+
+    public void save(String fileName) throws IOException {
+        PDDocument pdfdoc = docMap.get(fileName);
+        pdfdoc.save(fileName);
     }
 }
